@@ -11,7 +11,7 @@
 
 ### Interrupción 21H
 
-*http://ict.udlap.mx/people/oleg/docencia/ASSEMBLER/asm_interrup_21.html
+* http://ict.udlap.mx/people/oleg/docencia/ASSEMBLER/asm_interrup_21.html
 
 ### Codigo ASCII
 
