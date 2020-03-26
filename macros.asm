@@ -368,7 +368,7 @@ endm
 ;=== Fin Macro ===
 
 ;=== Macro - Llenar tablero ===
-M_Llenar_tablero macro buffer, coordenada, ficha
+M_Llenar_tablero macro buffer, coordenada, ficha, var
     local et_colocar_ficha, et_error_ficha, et_salir
     ;buffer es la matriz que contiene los datos del juego
 
@@ -384,6 +384,7 @@ M_Llenar_tablero macro buffer, coordenada, ficha
 
     et_colocar_ficha:
 	    mov buffer[bx], ficha;Poner una N en coordenada
+        add var, 1
         jmp et_salir
 
     et_error_ficha:
@@ -421,19 +422,21 @@ endm
 
 ;=== Macro - Abrir archivo
 M_ABRIR_ARCHIVO macro nombre, handle
+    xor ax, ax
     mov ah, 3dh             ;Funcion Abrir Archivo
-    mov al, 02h             ;Modo de Escritura
+    mov al, 00h             ;Modo de Escritura
     lea dx, nombre
     ;mov dx, offset nombre   ;Nombre del archivo a abrir
     int 21h
     jc et_error_abrir_archivo
-    mov handle, ax
+    
 
 endm
 ;=== Fin Macro ===
 
 ;=== Macro - Cerrar archivo
 M_CERRAR_ARCHIVO macro handle
+    xor ax, ax
     mov ah, 3eh
     mov bx, handle
     int 21h
@@ -443,16 +446,19 @@ endm
 
 ;=== Macro - Escribir archivo
 M_ESCRIBIR_ARCHIVO macro buffer, handle, num
+    xor ax, ax
     mov ah, 40h
     mov bx, handle
     mov cx, num
     mov dx, offset buffer
     int 21h
+    jc et_error_generar_archivo
 endm
 ;=== Fin Macro ===
 
 ;=== Macro - Leer archivo
 M_LEER_ARCHIVO macro handle, buffer, num
+    xor ax, ax
     mov ah, 3fh
     mov bx, handle
     mov cx, num
@@ -464,7 +470,7 @@ endm
 
 ;=== Macro - Crear archivo
 M_CREAR_ARCHIVO macro nombre
-
+    xor ax, ax
     mov ah, 3ch
     mov cx, 00h
     mov dx, offset nombre
@@ -473,6 +479,26 @@ M_CREAR_ARCHIVO macro nombre
 endm
 ;=== Fin Macro ===
 
+;=== Macro - Obtener fecha
+M_OBTENER_NUMERO macro numero, x
+    mov al, x
+    aam 
+    add al, 48
+    mov numero[1], al
+    
+    mov al, ah
+    aam
+    add al, 48
+    mov numero[0], al
+endm
+;=== Fin Macro
 
+;=== Macro - Toggle ===
+M_TOGGLE macro var 
+    mov al, var
+    not al
+    mov var, al
+endm
+;=== Fin Macro ===
 ;--------------- FIN DE MACROS -----------------
 
